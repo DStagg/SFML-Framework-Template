@@ -1,8 +1,7 @@
 #include <SFML/Graphics.hpp>
 
-#include "Scene.h"
-
-#include "TTTScene.h"
+#include "Framework/Scene.h"
+#include "MainScene.h"
 
 
 int main()
@@ -11,16 +10,21 @@ int main()
 	float deltaT = 0.f;
 	sf::Clock UpdateClock;
 
+	sf::RenderWindow _Window;
+	_Window.create(sf::VideoMode(624, 624), "SFML Window");
+
 	SceneManager SCM;
-	SCM.PushScene(new TTTScene());
-	
+	SCM.PushScene(new MainScene(&_Window));
+
 	UpdateClock.restart();
 	while (SCM.GetActiveScenePntr() != 0)
 	{
 		SCM.GetActiveScenePntr()->Update(UpdateClock.restart().asSeconds());
+		_Window.clear();
 		SCM.GetActiveScenePntr()->DrawScreen();
+		_Window.display();
 		SCM.CullScenes();
 	}
-	
+
 	return 0;
-}
+};
